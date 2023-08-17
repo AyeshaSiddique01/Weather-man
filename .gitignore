@@ -1,0 +1,5 @@
+.venv
+weatherfiles
+task.txt
+__pychache__
+.DS_Store
