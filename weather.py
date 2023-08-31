@@ -1,11 +1,11 @@
-'''  Weather class '''
+"""  Weather class """
 from dataclasses import dataclass
 from datetime import datetime
 
 
 @dataclass
 class Weather:
-    '''Class to represent weather data for a specific day'''
+    """Class to represent weather data for a specific day"""
 
     pkt: datetime
     max_temperature_celcius: int
@@ -22,7 +22,7 @@ class Weather:
         max_humidity,
         mean_humidity,
         min_humidity,
-    ) -> None:
+    ):
         self.pkt = pkt
         self.max_temperature_celcius = max_temperature_celcius
         self.min_temperature_celcius = min_temperature_celcius
