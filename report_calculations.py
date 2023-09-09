@@ -1,105 +1,58 @@
 """ calculates reports """
-from constants import BLUE, RED, WHITE
+from reports import MonthReport, YearReport
 
 
-class YearReportCalculation:
-    """Class to generate a yearly weather report"""
+class ReportCalculation:
+    """Class to calculate a weather report"""
 
-    def __init__(self, data_of_year):
-        self.data_of_year = data_of_year
-
-    def get_highest_temperature_day(self):
+    def get_year_extreme_report(self, records):
         """
-        Get highest temperature and day of year
-
+        calculate year extreme report
+        Args:
+            records: to generate extreme reports
         Returns:
-            Tuple (highest_temperature, day)
+            object of year report dataclass
         """
-        return max((day.max_temperature_celcius, day.pkt) for day in self.data_of_year)
+        highest_temp_record = max(records, key=lambda day: day.max_temperature_celcius)
+        highest_temperature = highest_temp_record.max_temperature_celcius
+        highest_temperature_day = highest_temp_record.pkt
 
-    def get_lowest_temperature_day(self):
-        """
-        Get lowest temperature and day of year
+        lowest_temp_record = min(records, key=lambda day: day.min_temperature_celcius)
+        lowest_temperature = lowest_temp_record.min_temperature_celcius
+        lowest_temperature_day = lowest_temp_record.pkt
 
-        Returns:
-            Tuple (lowest_temperature, day)
-        """
-        return min((day.min_temperature_celcius, day.pkt) for day in self.data_of_year)
+        highest_humidity_record = max(records, key=lambda day: day.max_humidity)
+        highest_humidity = highest_humidity_record.max_humidity
+        highest_humidity_day = highest_humidity_record.pkt
 
-    def get_highest_humidity_day(self):
-        """
-        Get highest humidity and day of year
-
-        Returns:
-            Tuple (highest_humidity, day)
-        """
-        return max((day.max_humidity, day.pkt) for day in self.data_of_year)
-
-
-class MonthReportCalculation:
-    """Class to generate a monthly weather report"""
-
-    def __init__(self, data_of_month):
-        self.data_of_month = data_of_month
-
-    def get_average_highest_temperature(self):
-        """
-        Calculate average highest temperature of month
-
-        Returns:
-            Average highest temperature
-        """
-        sum_of_highest_temp = sum(
-            day.max_temperature_celcius for day in self.data_of_month
+        return YearReport(
+            highest_temperature,
+            highest_temperature_day,
+            lowest_temperature,
+            lowest_temperature_day,
+            highest_humidity,
+            highest_humidity_day,
         )
-        return sum_of_highest_temp // len(self.data_of_month)
 
-    def get_average_lowest_temperature(self):
+    def get_month_average_report(self, records):
         """
-        Calculate average lowest temperature of month
-
+        calculate monthly average report
+        Args:
+            records: to generate average reports
         Returns:
-            Average lowest temperature
+            object of year report dataclass
         """
-        sum_of_lowest_temperature = sum(
-            day.min_temperature_celcius for day in self.data_of_month
+        sum_of_highest_temp = sum(day.max_temperature_celcius for day in records)
+        average_highest_temperature = sum_of_highest_temp // len(records)
+
+        sum_of_lowest_temperature = sum(day.min_temperature_celcius for day in records)
+        average_lowest_temperature = sum_of_lowest_temperature // len(records)
+
+        sum_of_mean_humidity = sum(day.mean_humidity for day in records)
+        average_mean_humidity = sum_of_mean_humidity // len(records)
+
+        return MonthReport(
+            average_highest_temperature,
+            average_lowest_temperature,
+            average_mean_humidity,
         )
-        return sum_of_lowest_temperature // len(self.data_of_month)
-
-    def get_average_mean_humidity(self):
-        """
-        Calculate average mean humidity of month
-
-        Returns:
-            Average mean humidity
-        """
-        sum_of_mean_humidity = sum(day.mean_humidity for day in self.data_of_month)
-        return sum_of_mean_humidity // len(self.data_of_month)
-
-
-class ChartsCalculation:
-    """Class to draw temperature charts"""
-
-    def __init__(self, data_of_month):
-        self.data_of_month = data_of_month
-
-    def get_graph(self):
-        """
-        Generate single and seperate graphs
-        Returns:
-            Dictionary of single and seperate charts of highest and lowest temperature of each day
-        """
-        single_graph_string = ""
-        seperate_graph_string = ""
-        for day in self.data_of_month:
-            date = day.pkt.strftime("%d")
-            max_temp = day.max_temperature_celcius
-            min_temp = day.min_temperature_celcius
-            seperate_graph_string += f"{date} {RED}{max_temp * '+'} {WHITE}{max_temp}C\n\
-{date} {BLUE}{min_temp * '+'} {WHITE}{min_temp}C\n"
-            single_graph_string += f"{date} {BLUE}{min_temp * '+'}{RED}{max_temp * '+'} \
-{WHITE}{min_temp}C-{max_temp}C\n"
-        return {
-            "single_graph_string": single_graph_string,
-            "seperate_graph_string": seperate_graph_string,
-        }

@@ -1,20 +1,5 @@
-from datetime import datetime
-
-
-def format_date(date):
-    """
-    Get date and format it
-
-    Args:
-        date: date to format
-
-    Returns:
-        Formatted date
-    """
-    try:
-        return datetime.strptime(date, "%Y/%m")
-    except ValueError:
-        raise f"Not a valid date: {date}"
+"""Helper functions for application"""
+from enum import Enum
 
 
 def stringnify_date(date):
@@ -28,3 +13,14 @@ def stringnify_date(date):
         Stringnify date with format (Mon day)
     """
     return date.strftime("%b %d")
+
+
+class WeatherAttribute(Enum):
+    """Enum for Weather Attribute"""
+
+    DATE = "PKT"
+    MAX_TEMP = "Max TemperatureC"
+    MIN_TEMP = "Min TemperatureC"
+    MAX_HUMIDITY = "Max Humidity"
+    MEAN_HUMIDITY = "Mean Humidity"
+    MIN_HUMIDITY = "Min Humidity"
